@@ -1,8 +1,8 @@
 #!/usr/bin/python3 -i
 #
-# Copyright (c) 2015-2019 Valve Corporation
-# Copyright (c) 2015-2019 LunarG, Inc.
-# Copyright (c) 2015-2019 Google Inc.
+# Copyright (c) 2015-2020 Valve Corporation
+# Copyright (c) 2015-2020 LunarG, Inc.
+# Copyright (c) 2015-2020 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -364,6 +364,61 @@ class ValidationObject {
             return nullptr;
         };
 
+        // Debug Logging Templates
+        template <typename HANDLE_T>
+        bool LogError(HANDLE_T src_object, const std::string &vuid_text, const char *format, ...) const {
+
+            va_list argptr;
+            va_start(argptr, format);
+            char *str;
+            if (-1 == vasprintf(&str, format, argptr)) {
+                str = nullptr;
+            }
+            va_end(argptr);
+
+            return log_msg(report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VkHandleInfo<HANDLE_T>::kDebugReportObjectType,
+                HandleToUint64(src_object), vuid_text, str ? str : "Allocation failure");
+        };
+
+        template <typename HANDLE_T>
+        bool LogWarning(HANDLE_T src_object, const std::string &vuid_text, const char *format, ...) const {
+            va_list argptr;
+            va_start(argptr, format);
+            char *str;
+            if (-1 == vasprintf(&str, format, argptr)) {
+                str = nullptr;
+            }
+            va_end(argptr);
+            return log_msg(report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, VkHandleInfo<HANDLE_T>::kDebugReportObjectType,
+                HandleToUint64(src_object), vuid_text, str ? str : "Allocation failure");
+        };
+
+        template <typename HANDLE_T>
+        bool LogPerformanceWarning(HANDLE_T src_object, const std::string &vuid_text, const char *format, ...) const {
+            va_list argptr;
+            va_start(argptr, format);
+            char *str;
+            if (-1 == vasprintf(&str, format, argptr)) {
+                str = nullptr;
+            }
+            va_end(argptr);
+            return log_msg(report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT, VkHandleInfo<HANDLE_T>::kDebugReportObjectType,
+                HandleToUint64(src_object), vuid_text, str ? str : "Allocation failure");
+        };
+
+        template <typename HANDLE_T>
+        bool LogInfo(HANDLE_T src_object, const std::string &vuid_text, const char *format, ...) const {
+            va_list argptr;
+            va_start(argptr, format);
+            char *str;
+            if (-1 == vasprintf(&str, format, argptr)) {
+                str = nullptr;
+            }
+            va_end(argptr);
+            return log_msg(report_data, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, VkHandleInfo<HANDLE_T>::kDebugReportObjectType,
+                HandleToUint64(src_object), vuid_text, str ? str : "Allocation failure");
+        };
+
         // Handle Wrapping Data
         // Reverse map display handles
         vl_concurrent_unordered_map<VkDisplayKHR, uint64_t, 0> display_id_reverse_mapping;
@@ -426,10 +481,10 @@ class ValidationObject {
 // This file is ***GENERATED***.  Do Not Edit.
 // See layer_chassis_generator.py for modifications.
 
-/* Copyright (c) 2015-2019 The Khronos Group Inc.
- * Copyright (c) 2015-2019 Valve Corporation
- * Copyright (c) 2015-2019 LunarG, Inc.
- * Copyright (c) 2015-2019 Google Inc.
+/* Copyright (c) 2015-2020 The Khronos Group Inc.
+ * Copyright (c) 2015-2020 Valve Corporation
+ * Copyright (c) 2015-2020 LunarG, Inc.
+ * Copyright (c) 2015-2020 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
